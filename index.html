@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Mapeamento de Laboratórios - UFSM</title>
+    <meta name="description" content="Formulário para mapeamento e cadastro de infraestrutura laboratorial para uso externo e prestação de serviços.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <header class="form-header">
+            <div class="logo-placeholder">
+                <i class="fa-solid fa-flask"></i>
+            </div>
+            <h1>Mapeamento de Infraestrutura Laboratorial</h1>
+            <p>Formulário para cadastro de laboratórios, equipamentos e serviços disponíveis para uso por terceiros.</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-track">
+                <div class="progress-bar-bg"></div>
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-steps-wrapper">
+                <div class="step-col">
+                    <div class="step active" data-step="1">1</div>
+                    <span class="active">Identificação</span>
+                </div>
+                <div class="step-col">
+                    <div class="step" data-step="2">2</div>
+                    <span>Capacidade e<br>Acesso</span>
+                </div>
+                <div class="step-col">
+                    <div class="step" data-step="3">3</div>
+                    <span>Infraestrutura</span>
+                </div>
+                <div class="step-col">
+                    <div class="step" data-step="4">4</div>
+                    <span>Finanças</span>
+                </div>
+            </div>
+        </div>
+
+        <form id="lab-form" class="glass-form">
+            <!-- STEP 1: Identificação -->
+            <div class="form-step active" id="step-1">
+                <div class="step-header">
+                    <span class="step-subtitle">ETAPA 1 DE 4</span>
+                    <h2>Identificação</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="nome_lab">1 - Nome do laboratório<span class="required">*</span></label>
+                    <input type="text" id="nome_lab" name="nome_lab" required placeholder="Ex: Laboratório de Análises Químicas (LAQ)">
+                </div>
+
+                <div class="form-group">
+                    <label for="responsavel">2 - Responsável técnico pelo laboratório<span class="required">*</span></label>
+                    <input type="text" id="responsavel" name="responsavel" required placeholder="Ex: Prof. Dr. João da Silva">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email_responsavel">E-mail do responsável técnico<span class="required">*</span></label>
+                    <input type="email" id="email_responsavel" name="email_responsavel" required placeholder="Ex: email@ufsm.br">
+                </div>
+
+                <div class="form-group">
+                    <label for="area_atuacao">3 - Área de atuação científica<span class="required">*</span></label>
+                    <textarea id="area_atuacao" name="area_atuacao" required rows="3" placeholder="Ex: Química Analítica, Biologia Molecular, Ciência dos Materiais..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="unidade_admin">4 - Unidade administrativa vinculada<span class="required">*</span></label>
+                    <span class="help-text">Unidade administrativa à qual o laboratório ou equipamento(s) está vinculado.</span>
+                    <input type="text" id="unidade_admin" name="unidade_admin" required placeholder="Ex: Centro de Ciências Naturais e Exatas (CCNE) / Departamento de Química">
+                </div>
+            </div>
+
+            <!-- STEP 2: Capacidade e Acesso -->
+            <div class="form-step" id="step-2">
+                <div class="step-header">
+                    <span class="step-subtitle">ETAPA 2 DE 4</span>
+                    <h2>Capacidade e Acesso</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="servicos">6 - Prestações de serviços que o laboratório/equipamento(s) tem capacidade de realizar<span class="required">*</span></label>
+                    <textarea id="servicos" name="servicos" required rows="3" placeholder="Ex: Análise de solo, sequenciamento genético, ensaios de tração e compressão..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="criterios_estabelecidos">7 - O laboratório já estabeleceu critérios para uso por terceiros externos à UFSM?<span class="required">*</span></label>
+                    <select id="criterios_estabelecidos" name="criterios_estabelecidos" required onchange="toggleConditionalField('crit_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="crit_details" style="display: none; margin-top: 1rem;">
+                        <span class="help-text" style="color: var(--text-main); margin-bottom: 0.5rem;">Descreva brevemente os critérios ou anexe documento</span>
+                        <textarea name="detalhes_criterios" class="optional-field" rows="3" placeholder="Ex: Solicitação formal via e-mail e aprovação do conselho do laboratório."></textarea>
+                        <div class="file-upload mt-2">
+                            <label for="anexo_criterios" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar documento (Opcional)</label>
+                            <input type="file" id="anexo_criterios" name="anexo_criterios" class="file-input optional-field">
+                            <span class="file-name" id="file-name-criterios">Nenhum arquivo selecionado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="restricoes">8 - Restrições para uso da infraestrutura por entes externos</label>
+                    <span class="help-text">Ex: normas de biossegurança, treinamento prévio, regulamentações específicas.</span>
+                    <textarea id="restricoes" name="restricoes" rows="3" placeholder="Ex: Obrigatório uso de jaleco e óculos de proteção. Necessário treinamento de 4 horas antes do uso dos equipamentos."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="suporte_tecnico">11 - O laboratório possui equipe disponível para suporte técnico a terceiros?<span class="required">*</span></label>
+                    <select id="suporte_tecnico" name="suporte_tecnico" required onchange="toggleConditionalField('sup_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="sup_details" style="display: none; margin-top: 1rem;">
+                        <textarea name="detalhes_suporte" rows="2" placeholder="Detalhes (ex: técnicos disponíveis, bolsistas...)"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="capacidade_atendimento">12 - Capacidade de atendimento<span class="required">*</span></label>
+                    <span class="help-text">Número de atendimentos/análises por período, ou capacidade simultânea.</span>
+                    <textarea id="capacidade_atendimento" name="capacidade_atendimento" required rows="3" placeholder="Ex: Capacidade de 50 análises por semana ou até 2 pesquisadores operando simultaneamente."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="horario">13 - Horário de funcionamento e disponibilidade para uso externo<span class="required">*</span></label>
+                    <textarea id="horario" name="horario" required rows="3" placeholder="Ex: Funcionamento de segunda a sexta, das 08h às 17h. Aberto para público externo nas terças e quintas."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="agendamento">13.1 - Como funcionaria o processo de agendamento para uso externo?</label>
+                    <textarea id="agendamento" name="agendamento" rows="3" placeholder="Ex: Solicitação via sistema de agendamento da UFSM ou contato pelo e-mail com 48h de antecedência."></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 3: Infraestrutura -->
+            <div class="form-step" id="step-3">
+                <div class="step-header">
+                    <span class="step-subtitle">ETAPA 3 DE 4</span>
+                    <h2>Infraestrutura</h2>
+                </div>
+
+                <div class="form-group">
+                    <label>10 - Infraestrutura e equipamentos disponíveis para uso por terceiros<span class="required">*</span></label>
+                    <span class="help-text">Adicione cada equipamento com nome, especificações técnicas e número de patrimônio.</span>
+                    
+                    <div id="equipment-list" class="equipment-list">
+                        <!-- Dynamic equipments here -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline mt-2" onclick="openEquipmentModal()">
+                        <i class="fa-solid fa-plus"></i> Adicionar Equipamento
+                    </button>
+                    
+                    <input type="hidden" id="infraestrutura_hidden" name="infraestrutura" required>
+
+                    <div class="file-upload" style="margin-top: 2rem;">
+                        <label for="anexo_patrimonio" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar lista de patrimônio (Opcional)</label>
+                        <input type="file" id="anexo_patrimonio" name="anexo_patrimonio" class="file-input">
+                        <span class="file-name" id="file-name-patrimonio">Nenhum arquivo selecionado</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao_area">16 - Descrição da área e bens concedidos<span class="required">*</span></label>
+                    <span class="help-text">Área (m²), localização, ambientes, equipamentos associados.</span>
+                    <textarea id="descricao_area" name="descricao_area" required rows="4" placeholder="Ex: Sala 1234 do prédio 45 com aproximadamente 60m². Possui 3 bancadas de trabalho, 2 capelas de exaustão e sistema de ar-condicionado central."></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 4: Regulamentação e Finanças -->
+            <div class="form-step" id="step-4">
+                <div class="step-header">
+                    <span class="step-subtitle">ETAPA 4 DE 4</span>
+                    <h2>Regulamentação e Finanças</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="possui_certificado">5 - O laboratório possui certificado de qualidade?<span class="required">*</span></label>
+                    <span class="help-text">Ex: ISO, acreditação INMETRO.</span>
+                    <select id="possui_certificado" name="possui_certificado" required onchange="toggleConditionalField('cert_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="cert_details" style="display: none; margin-top: 1rem;">
+                        <input type="text" name="detalhes_certificado" placeholder="Qual(is)? Ex: ISO 9001, ISO 17025...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contrato_global">9 - Possui Contrato Global via Fundação de Apoio?<span class="required">*</span></label>
+                    <select id="contrato_global" name="contrato_global" required onchange="toggleConditionalField('contr_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="contr_details" style="display: none; margin-top: 1rem;">
+                        <div class="file-upload">
+                            <label for="anexo_contrato" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar espelho do registro do projeto</label>
+                            <input type="file" id="anexo_contrato" name="anexo_contrato" class="file-input">
+                            <span class="file-name" id="file-name-contrato">Nenhum arquivo selecionado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contrapartida">15 - Há previsão de contrapartida financeira para uso externo?<span class="required">*</span></label>
+                    <select id="contrapartida" name="contrapartida" required onchange="toggleConditionalField('contra_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="contra_details" style="display: none; margin-top: 1rem;">
+                        <textarea name="detalhes_contrapartida" rows="2" placeholder="Qual? Descreva a contrapartida financeira ou econômica..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="condicoes_uso">17 - Condições de uso<span class="required">*</span></label>
+                    <textarea id="condicoes_uso" name="condicoes_uso" required rows="3" placeholder="Ex: Necessário trazer reagentes próprios. Consumíveis básicos como pipetas e luvas não são fornecidos. Em caso de dano aos equipamentos, o usuário externo é responsável pelo conserto."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="regimento">18 - Regimento Interno e Procedimentos de Segurança</label>
+                    <span class="help-text">Se aplicável, descreva ou anexe os normativos internos do laboratório.</span>
+                    <textarea id="regimento" name="regimento" rows="3" placeholder="Ex: Seguir a Normativa 01/2023 do laboratório que trata do recolhimento de resíduos químicos (arquivo em anexo)."></textarea>
+                    <div class="file-upload mt-2">
+                        <label for="anexo_regimento" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar Regimento/Normativo</label>
+                        <input type="file" id="anexo_regimento" name="anexo_regimento" class="file-input">
+                        <span class="file-name" id="file-name-regimento">Nenhum arquivo selecionado</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="info_adicional">14 - Informações adicionais</label>
+                    <span class="help-text">Algo mais que gostaria de incluir sobre o laboratório, especialmente relacionado com o compartilhamento externo.</span>
+                    <textarea id="info_adicional" name="info_adicional" rows="3" placeholder="Ex: O laboratório está em processo de acreditação ISO 17025 para ensaios físico-químicos, previsto para finalização em 2027."></textarea>
+                </div>
+            </div>
+
+            <!-- Form Navigation -->
+            <div class="form-navigation">
+                <button type="button" class="btn btn-secondary" id="prev-btn" style="display: none;">
+                    Voltar
+                </button>
+                <div class="spacer"></div>
+                <button type="button" class="btn btn-primary" id="next-btn">
+                    Avançar
+                </button>
+                <button type="submit" class="btn btn-primary" id="submit-btn" style="display: none;">
+                    Enviar Cadastro
+                </button>
+            </div>
+        </form>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-message" style="display: none;">
+            <div class="success-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2>Cadastro Enviado com Sucesso!</h2>
+            <p>Agradecemos por contribuir para o mapeamento da infraestrutura laboratorial da UFSM. Entraremos em contato se precisarmos de mais informações.</p>
+            <button class="btn btn-primary mt-4" onclick="location.reload()" style="margin: 0 auto;">Preencher novo formulário</button>
+        </div>
+    </div>
+
+    <!-- Equipment Modal -->
+    <div id="equipment-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Novo Equipamento</h3>
+                <button type="button" class="close-modal" onclick="closeEquipmentModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="eq_index">
+                
+                <div class="form-group">
+                    <label for="eq_nome">Nome do Equipamento <span class="required">*</span></label>
+                    <input type="text" id="eq_nome" placeholder="Ex: Espectrômetro de Massa">
+                </div>
+                
+                <div class="form-group">
+                    <label for="eq_specs">Especificações Técnicas <span class="required">*</span></label>
+                    <textarea id="eq_specs" rows="3" placeholder="Modelo, fabricante, capacidade, etc."></textarea>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="eq_patrimonio">Nº de Patrimônio <span class="required">*</span></label>
+                    <input type="text" id="eq_patrimonio" placeholder="Ex: 123456">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEquipmentModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveEquipment()" id="btn-save-eq">Adicionar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
