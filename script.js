@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // ==========================================
                 // IMPORTANTE: COLE AQUI A URL DO SEU WEB APP
                 // ==========================================
-                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNV-Y58t5kHxrA-H_zq40Yss67z4oRGUobBDLRMnmvDn1cEv3S_zUs0Gi7cDZrcYe7Bg/exec';
+                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZiGlodyr2DSf6FbGGaMhSN_8dnA_X29d-asMcOu-eNSZuIYj9tyyoN_OZlUz4OdoW/exec';
 
                 if (!SCRIPT_URL || SCRIPT_URL === '') {
                     console.log("Modo de simulação: Configure o SCRIPT_URL no script.js para integrar com o Google Sheets");
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fileInputs.forEach(input => {
         const fileNameDisplayId = 'file-name-' + input.id.split('_')[1];
         const displayEl = document.getElementById(fileNameDisplayId);
-        
+
         // Add dynamic clear button
         const clearBtn = document.createElement('button');
         clearBtn.type = 'button';
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearBtn.style.marginLeft = '0.5rem';
         clearBtn.style.verticalAlign = 'middle';
         clearBtn.title = 'Remover arquivo';
-        
+
         if (displayEl && displayEl.parentNode) {
             displayEl.parentNode.insertBefore(clearBtn, displayEl.nextSibling);
         }
@@ -230,13 +230,13 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('change', function (e) {
             const hasFile = e.target.files && e.target.files.length > 0;
             const fileName = hasFile ? e.target.files[0].name : 'Nenhum arquivo selecionado';
-            
+
             if (displayEl) {
                 displayEl.textContent = fileName;
                 displayEl.style.color = hasFile ? '#1e293b' : 'var(--text-muted)';
                 displayEl.style.fontWeight = hasFile ? '500' : 'normal';
             }
-            
+
             if (clearBtn) {
                 clearBtn.style.display = hasFile ? 'inline-block' : 'none';
             }
@@ -357,3 +357,4 @@ function renderEquipments() {
     const formatado = equipments.map((eq, i) => `Equipamento ${i + 1}:\nNome: ${eq.nome}\nSpecs: ${eq.specs}\nPatrimônio: ${eq.patrimonio}`).join('\n\n');
     hiddenInput.value = formatado;
 }
+
