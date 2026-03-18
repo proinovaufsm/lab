@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // ==========================================
                 // IMPORTANTE: COLE AQUI A URL DO SEU WEB APP
                 // ==========================================
-                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZiGlodyr2DSf6FbGGaMhSN_8dnA_X29d-asMcOu-eNSZuIYj9tyyoN_OZlUz4OdoW/exec';
+                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkgNC-P8eB_IFJrPp0f1oILjOSOyaCRZszxYnLRjzHIaEmxTmSdCQWsm-8YMMqwhwB/exec';
 
                 if (!SCRIPT_URL || SCRIPT_URL === '') {
                     console.log("Modo de simulação: Configure o SCRIPT_URL no script.js para integrar com o Google Sheets");
@@ -265,6 +265,27 @@ window.toggleConditionalField = function (fieldId, show) {
     }
 }
 
+// Global Function to handle specific logic for the contrapartida select options
+window.handleContrapartidaChange = function (value) {
+    const finContainer = document.getElementById('contra_financeira_container');
+    const ecoContainer = document.getElementById('contra_economica_container');
+
+    // Reset both displays
+    finContainer.style.display = 'none';
+    ecoContainer.style.display = 'none';
+
+    if (value === 'Sim, apenas contrapartida financeira') {
+        finContainer.style.display = 'block';
+    } else if (value === 'Sim, apenas contrapartida econômica') {
+        ecoContainer.style.display = 'block';
+    } else if (value === 'Sim, contrapartida financeira E contrapartida econômica') {
+        finContainer.style.display = 'block';
+        ecoContainer.style.display = 'block';
+    }
+
+    // We don't mess with 'required' attribute here because the fields are already classed 'optional-field' to avoid blocking submission
+}
+
 // Equipment List Logic
 let equipments = [];
 
@@ -357,4 +378,30 @@ function renderEquipments() {
     const formatado = equipments.map((eq, i) => `Equipamento ${i + 1}:\nNome: ${eq.nome}\nSpecs: ${eq.specs}\nPatrimônio: ${eq.patrimonio}`).join('\n\n');
     hiddenInput.value = formatado;
 }
+
+// Global Event Listener for Monetary Mask on 'Contrapartida Financeira' and 'Contrapartida Economica' fields
+document.addEventListener('DOMContentLoaded', () => {
+    const applyMonetaryMask = (inputId) => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, ""); // Keep only digits
+                if (value === "") {
+                    e.target.value = "";
+                    return;
+                }
+
+                // Convert to currency format
+                value = (parseInt(value, 10) / 100).toFixed(2) + "";
+                value = value.replace(".", ",");
+                value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+
+                e.target.value = "R$ " + value;
+            });
+        }
+    };
+
+    applyMonetaryMask('valor_financeira');
+    applyMonetaryMask('valor_economica');
+});
 
