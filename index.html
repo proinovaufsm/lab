@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Mapeamento de Laboratórios - UFSM</title>
+    <title>Cadastro Compartilhamento de Infraestruturas - UFSM</title>
     <meta name="description" content="Formulário para mapeamento e cadastro de infraestrutura laboratorial para uso externo e prestação de serviços.">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,7 @@
             <div class="logo-placeholder">
                 <i class="fa-solid fa-flask"></i>
             </div>
-            <h1>Mapeamento de Infraestrutura Laboratorial</h1>
+            <h1>Compartilhamento de Infraestruturas UFSM</h1>
             <p>Formulário para cadastro de laboratórios, equipamentos e serviços disponíveis para uso por terceiros.</p>
         </header>
 
@@ -38,15 +38,15 @@
                 </div>
                 <div class="step-col">
                     <div class="step" data-step="2">2</div>
-                    <span>Capacidade e<br>Acesso</span>
-                </div>
-                <div class="step-col">
-                    <div class="step" data-step="3">3</div>
                     <span>Infraestrutura</span>
                 </div>
                 <div class="step-col">
+                    <div class="step" data-step="3">3</div>
+                    <span>Capacidade e<br>Acesso</span>
+                </div>
+                <div class="step-col">
                     <div class="step" data-step="4">4</div>
-                    <span>Finanças</span>
+                    <span>Contrapartidas</span>
                 </div>
             </div>
         </div>
@@ -70,31 +70,117 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="email_responsavel">E-mail do responsável técnico<span class="required">*</span></label>
+                    <label for="responsavel_preenchimento">3 - Responsável pelo preenchimento do formulário<span class="required">*</span></label>
+                    <input type="text" id="responsavel_preenchimento" name="responsavel_preenchimento" required placeholder="Ex: Maria Souza (Técnica do Laboratório)">
+                </div>
+
+                <div class="form-group">
+                    <label for="email_responsavel">4 - E-mail do responsável pelo preenchimento<span class="required">*</span></label>
                     <input type="email" id="email_responsavel" name="email_responsavel" required placeholder="Ex: email@ufsm.br">
                 </div>
 
                 <div class="form-group">
-                    <label for="area_atuacao">3 - Área de atuação científica<span class="required">*</span></label>
+                    <label for="area_atuacao">5 - Área de atuação científica<span class="required">*</span></label>
                     <textarea id="area_atuacao" name="area_atuacao" required rows="3" placeholder="Ex: Química Analítica, Biologia Molecular, Ciência dos Materiais..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="unidade_admin">4 - Unidade administrativa vinculada<span class="required">*</span></label>
-                    <span class="help-text">Unidade administrativa à qual o laboratório ou equipamento(s) está vinculado.</span>
+                    <label for="unidade_admin">6 - Unidade administrativa à qual o laboratório ou equipamento(s) está vinculado.<span class="required">*</span></label>
                     <input type="text" id="unidade_admin" name="unidade_admin" required placeholder="Ex: Centro de Ciências Naturais e Exatas (CCNE) / Departamento de Química">
                 </div>
             </div>
 
-            <!-- STEP 2: Capacidade e Acesso -->
+            <!-- STEP 2: Infraestrutura -->
             <div class="form-step" id="step-2">
                 <div class="step-header">
                     <span class="step-subtitle">ETAPA 2 DE 4</span>
+                    <h2>Infraestrutura</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao_area">16 - Descrição da área e bens concedidos<span class="required">*</span></label>
+                    <span class="help-text">Área (m²), localização, ambientes, equipamentos associados.</span>
+                    <textarea id="descricao_area" name="descricao_area" required rows="4" placeholder="Ex: Sala 1234 do prédio 45 com aproximadamente 60m². Possui 3 bancadas de trabalho, 2 capelas de exaustão e sistema de ar-condicionado central."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="possui_certificado">5 - O laboratório possui certificado de qualidade?<span class="required">*</span></label>
+                    <span class="help-text">Ex: ISO, acreditação INMETRO.</span>
+                    <select id="possui_certificado" name="possui_certificado" required onchange="toggleConditionalField('cert_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="cert_details" style="display: none; margin-top: 1rem;">
+                        <input type="text" name="detalhes_certificado" class="optional-field" placeholder="Qual(is)? Ex: ISO 9001, ISO 17025...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>10 - Infraestrutura e equipamentos disponíveis para uso por terceiros<span class="required">*</span></label>
+                    <span class="help-text">Adicione cada equipamento com nome, especificações técnicas e número de patrimônio.</span>
+                    
+                    <div id="equipment-list" class="equipment-list">
+                        <!-- Dynamic equipments here -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline mt-2" onclick="openEquipmentModal()">
+                        <i class="fa-solid fa-plus"></i> Adicionar Equipamento
+                    </button>
+                    
+                    <input type="hidden" id="infraestrutura_hidden" name="infraestrutura" required>
+
+                    <div class="file-upload" style="margin-top: 2rem;">
+                        <label for="anexo_patrimonio" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar lista de patrimônio (Opcional)</label>
+                        <input type="file" id="anexo_patrimonio" name="anexo_patrimonio" class="file-input">
+                        <span class="file-name" id="file-name-patrimonio">Nenhum arquivo selecionado</span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label for="responsavel_patrimonio">Responsável patrimonial pelos equipamentos<span class="required">*</span></label>
+                    <input type="text" id="responsavel_patrimonio" name="responsavel_patrimonio" required placeholder="Ex: Nome do servidor responsável pelo patrimônio">
+                </div>
+
+                <div class="form-group">
+                    <label for="comite_gestor">O laboratório possuí comitê gestor, em caráter consultivo, constituído nos termos do art. 13 da <a href="https://www.ufsm.br/pro-reitorias/proplan/resolucao-ufsm-n-248-2026" target="_blank" rel="noopener noreferrer" style="color: var(--primary); text-decoration: underline;">Resolução UFSM N° 248/2026</a>?<span class="required">*</span></label>
+                    <select id="comite_gestor" name="comite_gestor" required onchange="toggleConditionalField('comite_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="comite_details" style="display: none; margin-top: 1rem;">
+                        <input type="text" id="nome_comite" name="nome_comite" class="optional-field" placeholder="Digite o nome do comitê">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- STEP 3: Capacidade e Acesso -->
+            <div class="form-step" id="step-3">
+                <div class="step-header">
+                    <span class="step-subtitle">ETAPA 3 DE 4</span>
                     <h2>Capacidade e Acesso</h2>
                 </div>
 
                 <div class="form-group">
-                    <label for="servicos">6 - Prestações de serviços que o laboratório/equipamento(s) tem capacidade de realizar<span class="required">*</span></label>
+                    <label for="contrato_global">9 - Possui Contrato Global via Fundação de Apoio para prestação de serviço/compartilhamento de infraestrutura?<span class="required">*</span></label>
+                    <select id="contrato_global" name="contrato_global" required onchange="toggleConditionalField('contr_details', this.value === 'Sim')">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div class="conditional-field" id="contr_details" style="display: none; margin-top: 1rem;">
+                        <div class="file-upload">
+                            <label for="anexo_contrato" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar espelho do registro do projeto</label>
+                            <input type="file" id="anexo_contrato" name="anexo_contrato" class="file-input optional-field">
+                            <span class="file-name" id="file-name-contrato">Nenhum arquivo selecionado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="servicos">6 - Quais tipos de serviços/ensaios/experimentos, que o laboratório/equipamento(s) tem capacidade de realizar<span class="required">*</span></label>
                     <textarea id="servicos" name="servicos" required rows="3" placeholder="Ex: Análise de solo, sequenciamento genético, ensaios de tração e compressão..."></textarea>
                 </div>
 
@@ -151,86 +237,32 @@
                 </div>
             </div>
 
-            <!-- STEP 3: Infraestrutura -->
-            <div class="form-step" id="step-3">
-                <div class="step-header">
-                    <span class="step-subtitle">ETAPA 3 DE 4</span>
-                    <h2>Infraestrutura</h2>
-                </div>
-
-                <div class="form-group">
-                    <label>10 - Infraestrutura e equipamentos disponíveis para uso por terceiros<span class="required">*</span></label>
-                    <span class="help-text">Adicione cada equipamento com nome, especificações técnicas e número de patrimônio.</span>
-                    
-                    <div id="equipment-list" class="equipment-list">
-                        <!-- Dynamic equipments here -->
-                    </div>
-                    
-                    <button type="button" class="btn btn-outline mt-2" onclick="openEquipmentModal()">
-                        <i class="fa-solid fa-plus"></i> Adicionar Equipamento
-                    </button>
-                    
-                    <input type="hidden" id="infraestrutura_hidden" name="infraestrutura" required>
-
-                    <div class="file-upload" style="margin-top: 2rem;">
-                        <label for="anexo_patrimonio" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar lista de patrimônio (Opcional)</label>
-                        <input type="file" id="anexo_patrimonio" name="anexo_patrimonio" class="file-input">
-                        <span class="file-name" id="file-name-patrimonio">Nenhum arquivo selecionado</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="descricao_area">16 - Descrição da área e bens concedidos<span class="required">*</span></label>
-                    <span class="help-text">Área (m²), localização, ambientes, equipamentos associados.</span>
-                    <textarea id="descricao_area" name="descricao_area" required rows="4" placeholder="Ex: Sala 1234 do prédio 45 com aproximadamente 60m². Possui 3 bancadas de trabalho, 2 capelas de exaustão e sistema de ar-condicionado central."></textarea>
-                </div>
-            </div>
-
-            <!-- STEP 4: Regulamentação e Finanças -->
+            <!-- STEP 4: Regulamentação e Contrapartidas -->
             <div class="form-step" id="step-4">
                 <div class="step-header">
                     <span class="step-subtitle">ETAPA 4 DE 4</span>
-                    <h2>Regulamentação e Finanças</h2>
+                    <h2>Regulamentação e Contrapartidas</h2>
                 </div>
 
                 <div class="form-group">
-                    <label for="possui_certificado">5 - O laboratório possui certificado de qualidade?<span class="required">*</span></label>
-                    <span class="help-text">Ex: ISO, acreditação INMETRO.</span>
-                    <select id="possui_certificado" name="possui_certificado" required onchange="toggleConditionalField('cert_details', this.value === 'Sim')">
+                    <label for="contrapartida">15 - Há definição de contrapartida financeira e/ou econômica para uso externo?<span class="required">*</span></label>
+                    <select id="contrapartida" name="contrapartida" required onchange="handleContrapartidaChange(this.value)">
                         <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
                         <option value="Não">Não</option>
+                        <option value="Sim, apenas contrapartida financeira">Sim, apenas contrapartida financeira</option>
+                        <option value="Sim, apenas contrapartida econômica">Sim, apenas contrapartida econômica</option>
+                        <option value="Sim, contrapartida financeira E contrapartida econômica">Sim, contrapartida financeira E contrapartida econômica</option>
                     </select>
-                    <div class="conditional-field" id="cert_details" style="display: none; margin-top: 1rem;">
-                        <input type="text" name="detalhes_certificado" placeholder="Qual(is)? Ex: ISO 9001, ISO 17025...">
+                    
+                    <div id="contra_financeira_container" style="display: none; margin-top: 1rem; padding-left: 1rem; border-left: 2px solid var(--primary-color);">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.95rem;">Contrapartida Financeira</label>
+                        <input type="text" id="valor_financeira" name="valor_financeira" class="optional-field" placeholder="Valor da contrapartida financeira em R$" style="margin-bottom: 1rem;">
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="contrato_global">9 - Possui Contrato Global via Fundação de Apoio?<span class="required">*</span></label>
-                    <select id="contrato_global" name="contrato_global" required onchange="toggleConditionalField('contr_details', this.value === 'Sim')">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div class="conditional-field" id="contr_details" style="display: none; margin-top: 1rem;">
-                        <div class="file-upload">
-                            <label for="anexo_contrato" class="file-label"><i class="fa-solid fa-paperclip"></i> Anexar espelho do registro do projeto</label>
-                            <input type="file" id="anexo_contrato" name="anexo_contrato" class="file-input">
-                            <span class="file-name" id="file-name-contrato">Nenhum arquivo selecionado</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="contrapartida">15 - Há previsão de contrapartida financeira para uso externo?<span class="required">*</span></label>
-                    <select id="contrapartida" name="contrapartida" required onchange="toggleConditionalField('contra_details', this.value === 'Sim')">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div class="conditional-field" id="contra_details" style="display: none; margin-top: 1rem;">
-                        <textarea name="detalhes_contrapartida" rows="2" placeholder="Qual? Descreva a contrapartida financeira ou econômica..."></textarea>
+                    <div id="contra_economica_container" style="display: none; margin-top: 1rem; padding-left: 1rem; border-left: 2px solid var(--primary-color);">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.95rem;">Contrapartida Econômica</label>
+                        <input type="text" id="valor_economica" name="valor_economica" class="optional-field" placeholder="Valor da contrapartida econômica em R$" style="margin-bottom: 1rem;">
+                        <textarea name="detalhes_economica" class="optional-field" rows="2" placeholder="Descreva o tipo da contrapartida econômica"></textarea>
                     </div>
                 </div>
 
@@ -318,3 +350,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
