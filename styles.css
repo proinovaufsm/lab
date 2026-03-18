@@ -674,6 +674,7 @@ select {
 
 .success-message p {
     color: var(--text-muted);
+    margin-bottom: 2rem;
 }
 
 /* Responsive */
